@@ -64,6 +64,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         log.info("WELCOME TO TEST APPLICATION");
+        log.info("WELCOME TO TEST APPLICATION for git test");
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
