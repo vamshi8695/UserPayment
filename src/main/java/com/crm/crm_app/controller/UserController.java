@@ -63,7 +63,7 @@ public class UserController {
         if (userDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        log.info("WELCOME TO TEST APPLICATION");
+        log.info("WELCOME TO UserPayment APPLICATION");
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
