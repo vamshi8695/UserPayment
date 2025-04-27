@@ -1,5 +1,6 @@
-package com.crm.crm_app.service.impl;
+package com.crm.crm_app.service;
 
+// Importing required classes
 import com.crm.crm_app.dto.UserDTO;
 import com.crm.crm_app.model.User;
 import com.crm.crm_app.repository.UserRepository;
@@ -14,80 +15,86 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// @Service tells Spring this is a "Service Layer" component
+/**
+ * Implementation class of UserService interface
+ * Annotated with @Service to mark it as a Spring service class
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
-    // Injecting UserRepository to perform database operations.
+    // Inject UserRepository dependency so we can perform DB operations
     @Autowired
     private UserRepository userRepository;
 
-    // Convert DTO to Entity for saving to DB.
+    // Helper method to convert UserDTO (used in APIs) to User entity (used in DB)
     private User mapToEntity(UserDTO userDTO) {
         User user = new User();
-        user.setId(userDTO.getId());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setNotes(userDTO.getNotes());
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setId(userDTO.getId());  // Set ID
+        user.setFirstName(userDTO.getFirstName());  // Set First Name
+        user.setLastName(userDTO.getLastName());    // Set Last Name
+        user.setEmail(userDTO.getEmail());          // Set Email
+        user.setPhoneNumber(userDTO.getPhoneNumber()); // Set Phone
+        user.setNotes(userDTO.getNotes());          // Set Notes
+        user.setUsername(userDTO.getUsername());    // Set Username
+        user.setPassword(userDTO.getPassword());    // Set Password
         return user;
     }
 
-    // Convert Entity to DTO for sending to the client.
+    // Helper method to convert User entity to UserDTO (to send to client)
     private UserDTO mapToDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setNotes(user.getNotes());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword());
+        userDTO.setId(user.getId());                // Set ID
+        userDTO.setFirstName(user.getFirstName());  // Set First Name
+        userDTO.setLastName(user.getLastName());    // Set Last Name
+        userDTO.setEmail(user.getEmail());          // Set Email
+        userDTO.setPhoneNumber(user.getPhoneNumber()); // Set Phone
+        userDTO.setNotes(user.getNotes());          // Set Notes
+        userDTO.setUsername(user.getUsername());    // Set Username
+        userDTO.setPassword(user.getPassword());    // Set Password
         return userDTO;
     }
 
-    // Creates a user (input: UserDTO), saves it to DB, and returns the saved UserDTO.
+    // Create a new user: Convert DTO to Entity -> Save to DB -> Convert Entity back to DTO
     @Override
     public UserDTO createUser(UserDTO userDTO) {
-        User user = mapToEntity(userDTO);
-        User savedUser = userRepository.save(user);
-        return mapToDTO(savedUser);
+        User user = mapToEntity(userDTO);                // Convert to Entity
+        User savedUser = userRepository.save(user);      // Save to DB
+        return mapToDTO(savedUser);                      // Convert saved Entity to DTO
     }
 
-    // Returns all users from DB, converted to a list of UserDTO.
+    // Fetch all users from DB and convert each to DTO
     @Override
     public List<UserDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<User> users = userRepository.findAll();                 // Fetch all users
+        return users.stream().map(this::mapToDTO)                    // Convert each user to DTO
+                .collect(Collectors.toList());                 // Collect into a list
     }
 
-    // Returns a single user by ID as UserDTO.
+    // Fetch a user by ID and return as DTO; throw exception if not found
     @Override
     public UserDTO getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
-        return mapToDTO(user);
+        User user = userRepository.findById(id)                      // Try to find user
+                .orElseThrow(() -> new RuntimeException("User not found with id " + id)); // Throw if not found
+        return mapToDTO(user);                                       // Convert to DTO
     }
 
-    // Deletes a user by ID.
+    // Delete a user by ID
     @Override
     public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+        userRepository.deleteById(id);                               // Delete from DB
     }
 
+    // Fetch users with pagination
     @Override
     public Page<User> getAllUsersPaginated(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return userRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, size);              // Create page request
+        return userRepository.findAll(pageable);                     // Fetch page from DB
     }
 
+    // Fetch users with pagination and sorting by a specific field
     @Override
     public Page<User> getAllUsersPaginatedAndSorted(int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());  // Sort ascending by default
-        return userRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending()); // Create sorted pageable
+        return userRepository.findAll(pageable);                                       // Fetch sorted page from DB
     }
 }
