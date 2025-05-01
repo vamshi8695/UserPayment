@@ -61,7 +61,7 @@ public class UserController {
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         // Call service method to save the user
         UserDTO createdUser = userService.createUser(userDTO);
-
+log.info("hi");
         // Return the created user along with HTTP status 201 (Created)
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
