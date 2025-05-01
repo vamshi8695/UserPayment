@@ -81,7 +81,7 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         // Call service method to get all users
         List<UserDTO> users = userService.getAllUsers();
-
+log.info("hi stash check");
         // If no users found, return HTTP 204 (No Content)
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
