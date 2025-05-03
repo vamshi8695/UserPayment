@@ -9,7 +9,7 @@ public class UserPaymentApplication {
 	public static void main(String[] args) {
 		// Spring Boot's main method: launches the server,
 		// sets up Spring context, and starts your web app.
-
+System.out.println("Welcome");
 		SpringApplication.run(UserPaymentApplication.class, args);
 	}
 
