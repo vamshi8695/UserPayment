@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
     // Handling UserNotFoundException
     @ExceptionHandler(UserNotFoundException.class) //Used to catch specific exceptions (like UserNotFoundException).
     public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND, LocalDateTime.now());
     }
 
     // Handling all other exceptions
